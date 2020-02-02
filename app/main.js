@@ -1,7 +1,8 @@
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1';
 
+const fs = require('fs');
 
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, dialog } = require('electron');
 
 let mainWindow = null;
 app.on("ready", () => {
@@ -14,9 +15,32 @@ app.on("ready", () => {
   
   mainWindow.loadFile(`${__dirname}/index.html`)
 
+
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
   })
 })
+
+exports.getFileFromUser = async () => {
+  const files = await dialog.showOpenDialog({
+    properties: ["openFile"],
+    buttonLabel: 'Unveil',
+    title: 'Open Fire Sale Document',
+    filters: [
+      {
+        name: 'Text Files', extensions: ['txt', 'text'] },
+      { name: 'Markdown Files', extensions: ['md'] }
+    ]
+  })
+
+  if(!files.canceled) {
+    const file = files.filePaths[0]
+    const content = fs.readFileSync(file)
+
+    console.log(content.toString());
+    
+  }
+  
+}
 
 
