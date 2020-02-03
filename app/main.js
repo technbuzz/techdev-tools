@@ -33,12 +33,33 @@ exports.getFileFromUser = async () => {
       { name: 'Text Files', extensions: ['txt', 'text'] }
     ]
   })
-
+  
   if(!files.canceled) {
     const file = files.filePaths[0]
     openFile(file);    
   }
   
+}
+
+exports.saveMarkdown = async (file, content) => {
+  if(!file) {
+    const actionResult = await dialog.showSaveDialog({
+      title: 'Save Markdown',
+      defaultPath: app.getPath('desktop'),
+      filters: [
+        { name: 'Text Files', extensions: ['txt', 'text'] }
+      ]
+    })
+
+    if(actionResult.canceled) return
+
+    file = actionResult.filePath
+  }
+
+  if(!file) return
+
+  fs.writeFileSync(file, content);
+  openFile(file);
 }
 
 

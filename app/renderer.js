@@ -55,12 +55,17 @@ openFileButton.addEventListener('click', () => {
   mainProcess.getFileFromUser();
 })
 
+saveMarkdownButton.addEventListener('click', () => {
+  mainProcess.saveMarkdown(filePath, markdownView.value);
+})
+
 ipcRenderer.on('file-opened', (event, file, content) => {
+  debugger
   filePath = file;
   originalContent = content;
 
   markdownView.value = content;
   renderMarkdownToHtml(content);
 
-  updateUserInterface()
+  updateUserInterface(false)
 })
