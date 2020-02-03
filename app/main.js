@@ -2,8 +2,10 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1';
 
 const fs = require('fs');
 
+
 const { app, BrowserWindow, dialog } = require('electron');
 
+/** @type {BrowserWindow} */
 let mainWindow = null;
 app.on("ready", () => {
   mainWindow = new BrowserWindow({
@@ -35,12 +37,16 @@ exports.getFileFromUser = async () => {
 
   if(!files.canceled) {
     const file = files.filePaths[0]
-    const content = fs.readFileSync(file)
-
-    console.log(content.toString());
-    
+    openFile(file);    
   }
   
 }
 
+
+
+
+function openFile(file) {
+  const content = fs.readFileSync(file).toString();
+  mainWindow.webContents.send('file-opened', file, content)
+}
 
