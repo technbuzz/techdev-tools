@@ -26,7 +26,6 @@ markdownView.addEventListener('keyup', event => {
 });
 
 copyEscapedHTMLButton.addEventListener('click', () => {
-  console.log(escapedHTML);
   clipboard.writeText(escapedHTML)
 })
 
