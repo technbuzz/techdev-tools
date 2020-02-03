@@ -29,9 +29,8 @@ exports.getFileFromUser = async () => {
     buttonLabel: 'Unveil',
     title: 'Open Fire Sale Document',
     filters: [
-      {
-        name: 'Text Files', extensions: ['txt', 'text'] },
-      { name: 'Markdown Files', extensions: ['md'] }
+      { name: 'Markdown Files', extensions: ['md'] },
+      { name: 'Text Files', extensions: ['txt', 'text'] }
     ]
   })
 
@@ -47,6 +46,7 @@ exports.getFileFromUser = async () => {
 
 function openFile(file) {
   const content = fs.readFileSync(file).toString();
+  app.addRecentDocument(file)
   mainWindow.webContents.send('file-opened', file, content)
 }
 
