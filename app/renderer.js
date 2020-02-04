@@ -1,6 +1,6 @@
 const path = require('path');
 const marked = require('marked');
-const { remote, ipcRenderer } = require('electron')
+const { remote, ipcRenderer, shell } = require('electron')
 
 let filePath = null;
 let originalContent = '';
@@ -36,7 +36,9 @@ const updateUserInterface = isEdited => {
   if(isEdited) {
     title = `${title} (Edited)`
   }
-  
+
+  showFileButton.disabled = !filePath
+  openInDefaultButton.disabled = !filePath
 
   saveMarkdownButton.disabled = !isEdited
   revertButton.disabled = !isEdited
@@ -61,6 +63,21 @@ saveMarkdownButton.addEventListener('click', () => {
 
 saveHtmlButton.addEventListener('click', () => {
   mainProcess.saveHTML(htmlView.innerHTML);
+})
+
+showFileButton.addEventListener('click', event => {
+  if (!filePath) {
+    return alert('Nope')
+  }
+  shell.showItemInFolder(filePath)
+})
+
+openInDefaultButton.addEventListener('click', event => {
+  if (!filePath) {
+    return alert('Nope')
+  }
+
+  shell.openItem(filePath)
 })
 
 ipcRenderer.on('file-opened', (event, file, content) => {

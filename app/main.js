@@ -3,7 +3,7 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = '1';
 const fs = require('fs');
 
 
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, dialog, Menu } = require('electron');
 
 /** @type {BrowserWindow} */
 let mainWindow = null;
@@ -87,4 +87,21 @@ const openFile = exports.openFile = (file) => {
   app.addRecentDocument(file)
   mainWindow.webContents.send('file-opened', file, content)
 }
+
+const template = [
+  {
+    label: 'File',
+    subMenu: [
+      {
+        label: 'Open File',
+        click() {
+          console.log('Open File');
+          
+        }
+      }
+    ]
+  }
+]
+
+const applicationMenu = Menu.buildFromTemplate(template)
 
