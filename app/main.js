@@ -62,10 +62,27 @@ exports.saveMarkdown = async (file, content) => {
   openFile(file);
 }
 
+exports.saveHTML = async (content) => {
+  const actionResult = await dialog.showSaveDialog({
+    title: 'Save HTML',
+    defaultPath: app.getPath('documents'),
+    filters: [
+      {name: 'HTML Files', extensions: ['html', 'htm']}
+    ]
+  })
+
+  if(actionResult.canceled) return
+
+  const file = actionResult.filePath
+
+  if(!file) return
 
 
+  fs.writeFileSync(file, content);
+}
 
-function openFile(file) {
+
+const openFile = exports.openFile = (file) => {
   const content = fs.readFileSync(file).toString();
   app.addRecentDocument(file)
   mainWindow.webContents.send('file-opened', file, content)
